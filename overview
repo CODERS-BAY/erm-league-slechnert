@@ -1,0 +1,20 @@
+Rocket League
+
+
+Roles(name)
+Persons(id, first name, last name, nationality)
+Role_Person_assoc(role, person)
+Regions(name)
+
+Leagues(name, order, region, prize_pool)
+Teams(id, name, region, league, league points, league position)
+Person_team_assoc(team id, person)
+
+League_Game Schedule(sid, team1, team2, datetime, league, rounds_max, region)
+Round_Scores(sid, team1_points, team2_points, round)
+League_Game_Scores(sid, team1_points_gain, team2_points_gain)
+
+
+league_prize_dist(place, prize)
+
+

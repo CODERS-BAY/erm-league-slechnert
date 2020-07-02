@@ -1,0 +1,95 @@
+CREATE TABLE roles(
+	name varchar(20),
+	PRIMARY KEY (name)
+);
+
+CREATE TABLE persons(
+	person_id int(10),
+	first_name varchar(20),
+	last_name varchar(20),
+	nationality varchar(40),
+	PRIMARY KEY (person_id)
+);
+
+CREATE TABLE person_role_assoc(
+	role varchar(20),
+	person int(10),
+	PRIMARY KEY (role, person),
+	FOREIGN KEY (role) REFERENCES roles(name),
+	FOREIGN KEY (person) REFERENCES persons(person_id)
+);
+
+CREATE TABLE regions(
+	region_name varchar(40),
+	PRIMARY KEY (region_name)
+);
+
+CREATE TABLE leagues(
+	league_id int(10),
+	league_name varchar(40),
+	hirachy_number int(1),
+	league_region varchar(40),
+	prize_pool double(9,2),
+	PRIMARY KEY (league_id),
+	FOREIGN KEY (league_region) REFERENCES regions(region_name)
+);
+
+CREATE TABLE teams(
+	team_id int(10),
+	team_name varchar(40),
+	team_region varchar(40),
+	league int(10),
+	league_position int(2),
+	league_points int(2),
+	PRIMARY KEY (team_id),
+	FOREIGN KEY (team_region) REFERENCES regions(region_name),
+	FOREIGN KEY (league) REFERENCES leagues(league_id)
+);
+
+CREATE TABLE persons_team_assoc(
+	team int(10),
+	person int(10),
+	PRIMARY KEY (team, person),
+	FOREIGN KEY (team) REFERENCES teams(team_id),
+	FOREIGN KEY (person) REFERENCES persons(person_id)
+);
+
+CREATE TABLE game_schedule(
+	serial_id int(10),
+	team1 int(10),
+	team2 int(10),
+	game_date datetime,
+	league int(10),
+	rounds_max int(2),
+	PRIMARY KEY (serial_id),
+	FOREIGN KEY (team1) REFERENCES teams(team_id), 
+	FOREIGN KEY (team2) REFERENCES teams(team_id),
+	FOREIGN KEY (league) REFERENCES leagues(league_id)
+);
+
+CREATE TABLE round_scores(
+	serial_id int(10),
+	round int(2),
+	team1_goals int(2),
+	team2_goals int(2),
+	PRIMARY KEY (serial_id, round),
+	FOREIGN KEY (serial_id) REFERENCES game_schedule(serial_id)
+);
+
+CREATE TABLE game_scores(
+	game int(10),
+	team1_points_gain int(1),
+	team2_points_gain int(1),
+	PRIMARY KEY (game, team1_points_gain, team2_points_gain),
+	FOREIGN KEY (game) REFERENCES game_schedule(serial_id)
+);
+
+CREATE TABLE league_prize_distribution(
+	league int(10),
+	prize double(7,2),
+	rank int(1),
+	team int(10),
+	PRIMARY KEY (league, rank),
+	FOREIGN KEY (team) REFERENCES teams(team_id),
+	FOREIGN KEY (league) REFERENCES leagues(league_id)
+);
